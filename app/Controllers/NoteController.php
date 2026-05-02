@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\NoteModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 class NoteController extends BaseController
 {
@@ -244,6 +245,42 @@ class NoteController extends BaseController
             $note['video_array'] = is_array($decoded) ? $decoded : [];
         }
         return view('notes/view', ['note' => $note]);
+    }
+
+    public function downloadMedia($noteId, $filename)
+    {
+        $filename = basename((string) $filename);
+        if ($filename === '') {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
+        $model = new NoteModel();
+        $note = $model->find((int) $noteId);
+        if (! $note || $note['user_id'] != session()->get('id')) {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
+        $photos = [];
+        if (! empty($note['photo'])) {
+            $decoded = json_decode((string) $note['photo'], true);
+            $photos    = is_array($decoded) ? $decoded : [];
+        }
+        $videos = [];
+        if (! empty($note['video'])) {
+            $decoded = json_decode((string) $note['video'], true);
+            $videos  = is_array($decoded) ? $decoded : [];
+        }
+
+        if (! in_array($filename, $photos, true) && ! in_array($filename, $videos, true)) {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
+        $filepath = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . $filename;
+        if (! is_file($filepath)) {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
+        return $this->response->download($filepath, null, true);
     }
 
     public function export()
