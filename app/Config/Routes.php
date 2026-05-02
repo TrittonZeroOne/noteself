@@ -47,4 +47,5 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->get('/plans/export', 'PlanController::export');
     $routes->get('/plans/complete/(:num)', 'PlanController::complete/$1');
     $routes->get('/plans/uncomplete/(:num)', 'PlanController::uncomplete/$1');
+    $routes->get('/plans/view/(:num)', 'PlanController::view/$1'); // <-- TAMBAH INI
 });
