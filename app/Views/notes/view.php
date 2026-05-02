@@ -13,7 +13,10 @@
         <strong>Foto:</strong>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
             <?php foreach($note['photo_array'] as $photo): ?>
-            <img src="<?= base_url('uploads/'.$photo) ?>" class="rounded shadow object-cover h-32 w-full">
+            <div class="flex flex-col">
+                <img src="<?= base_url('uploads/'.$photo) ?>" alt="" class="rounded shadow object-cover h-32 w-full">
+                <a href="<?= base_url('notes/download-media/'.$note['id'].'/'.rawurlencode($photo)) ?>" class="text-center text-sm text-blue-600 hover:underline mt-1">Unduh foto</a>
+            </div>
             <?php endforeach; ?>
         </div>
     </div>
@@ -23,9 +26,12 @@
     <div class="mb-4">
         <strong>Video:</strong>
         <?php foreach($note['video_array'] as $video): ?>
-        <video controls class="w-full rounded shadow mt-2">
-            <source src="<?= base_url('uploads/'.$video) ?>" type="video/mp4">
-        </video>
+        <div class="mt-2">
+            <video controls class="w-full rounded shadow">
+                <source src="<?= base_url('uploads/'.$video) ?>" type="video/mp4">
+            </video>
+            <a href="<?= base_url('notes/download-media/'.$note['id'].'/'.rawurlencode($video)) ?>" class="inline-block text-sm text-blue-600 hover:underline mt-1">Unduh video</a>
+        </div>
         <?php endforeach; ?>
     </div>
     <?php endif; ?>
