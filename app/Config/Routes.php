@@ -34,6 +34,7 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->post('/notes/update/(:num)', 'NoteController::update/$1');
     $routes->get('/notes/delete/(:num)', 'NoteController::delete/$1');
     $routes->get('/notes/view/(:num)', 'NoteController::view/$1');
+    $routes->get('/notes/download-media/(:num)/(:segment)', 'NoteController::downloadMedia/$1/$2');
     $routes->get('/notes/export', 'NoteController::export');
     
     // Plans
